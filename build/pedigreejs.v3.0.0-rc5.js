@@ -1068,51 +1068,51 @@ var pedigreejs = (function (exports) {
 	function addButtons(options) {
 	  let opts = $.extend({
 	    // defaults
-	    btn_target: 'pedigree_history'
+	    btn_target: "pedigree_history"
 	  }, options);
 	  let btns = [{
-	    "fa": "fa-file-image",
-	    "title": "download PNG image"
+	    fa: "fa-file-image",
+	    title: "download PNG image"
 	  }, {
-	    "fa": "fa-undo",
-	    "title": "undo"
+	    fa: "fa-undo",
+	    title: "undo"
 	  }, {
-	    "fa": "fa-redo",
-	    "title": "redo"
+	    fa: "fa-redo",
+	    title: "redo"
 	  }, {
-	    "fa": "fa-refresh",
-	    "title": "reset"
+	    fa: "fa-refresh",
+	    title: "reset"
 	  }];
 	  btns.push({
-	    "fa": "fa-crosshairs",
-	    "title": "scale-to-fit"
+	    fa: "fa-crosshairs",
+	    title: "scale-to-fit"
 	  });
-	  if (opts.zoomSrc && opts.zoomSrc.indexOf('button') > -1) {
+	  if (opts.zoomSrc && opts.zoomSrc.indexOf("button") > -1) {
 	    if (opts.zoomOut !== 1) btns.push({
-	      "fa": "fa-minus-circle",
-	      "title": "zoom-out"
+	      fa: "fa-minus-circle",
+	      title: "zoom-out"
 	    });
 	    if (opts.zoomIn !== 1) btns.push({
-	      "fa": "fa-plus-circle",
-	      "title": "zoom-in"
+	      fa: "fa-plus-circle",
+	      title: "zoom-in"
 	    });
 	  }
 	  btns.push({
-	    "fa": "fa-arrows-alt",
-	    "title": "fullscreen"
+	    fa: "fa-arrows-alt",
+	    title: "fullscreen"
 	  });
 	  let lis = "";
 	  for (let i = 0; i < btns.length; i++) {
-	    lis += '<span>';
-	    lis += '<i class="fa fa-lg ' + btns[i].fa + ' pe-2" aria-hidden="true" title="' + btns[i].title + '"' + (btns[i].fa === "fa-arrows-alt" ? 'id="fullscreen" ' : '') + '></i>';
-	    lis += '</span>';
+	    lis += "<span>";
+	    lis += '<i class="fa fa-lg ' + btns[i].fa + ' pe-2" aria-hidden="true" title="' + btns[i].title + '"' + (btns[i].fa === "fa-arrows-alt" ? 'id="fullscreen" ' : "") + "></i>";
+	    lis += "</span>";
 	  }
 	  $("#" + opts.btn_target).append(lis);
 	  addPbuttonEvents(opts);
 	}
 	function addPbuttonEvents(opts) {
 	  // fullscreen
-	  $(document).on('webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange', function (_e) {
+	  $(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange", function (_e) {
 	    let local_dataset = current(opts);
 	    if (local_dataset !== undefined && local_dataset !== null) {
 	      opts.dataset = local_dataset;
@@ -1122,7 +1122,7 @@ var pedigreejs = (function (exports) {
 	      scale_to_fit(opts);
 	    }, 500);
 	  });
-	  $('#fullscreen').on('click', function (_e) {
+	  $("#fullscreen").on("click", function (_e) {
 	    // toggle fullscreen
 	    if (!is_fullscreen()) {
 	      let target = $("#" + opts.targetDiv)[0];
@@ -1156,9 +1156,9 @@ var pedigreejs = (function (exports) {
 	  function zoomOut() {
 	    btn_zoom(opts, 0.95);
 	  }
-	  $('.fa-plus-circle, .fa-minus-circle').on('mousedown', function () {
+	  $(".fa-plus-circle, .fa-minus-circle").on("mousedown", function () {
 	    timeoutId = setInterval($(this).hasClass("fa-plus-circle") ? zoomIn : zoomOut, 50);
-	  }).on('mouseup mouseleave', function () {
+	  }).on("mouseup mouseleave", function () {
 	    clearInterval(timeoutId);
 	  });
 
@@ -1166,24 +1166,24 @@ var pedigreejs = (function (exports) {
 	  $("#" + opts.btn_target).on("click", function (e) {
 	    e.stopPropagation();
 	    if ($(e.target).hasClass("disabled")) return false;
-	    if ($(e.target).hasClass('fa-undo')) {
+	    if ($(e.target).hasClass("fa-undo")) {
 	      opts.dataset = previous(opts);
 	      $("#" + opts.targetDiv).empty();
 	      build(opts);
-	    } else if ($(e.target).hasClass('fa-redo')) {
+	    } else if ($(e.target).hasClass("fa-redo")) {
 	      opts.dataset = next(opts);
 	      $("#" + opts.targetDiv).empty();
 	      build(opts);
-	    } else if ($(e.target).hasClass('fa-refresh')) {
+	    } else if ($(e.target).hasClass("fa-refresh")) {
 	      messages("Pedigree Reset", "This may result in loss of some data. Reset now?", reset, opts);
-	    } else if ($(e.target).hasClass('fa-crosshairs')) {
+	    } else if ($(e.target).hasClass("fa-crosshairs")) {
 	      scale_to_fit(opts);
-	    } else if ($(e.target).hasClass('fa-file-image')) {
+	    } else if ($(e.target).hasClass("fa-file-image")) {
 	      return;
 	    }
 
 	    // trigger fhChange event
-	    $(document).trigger('fhChange', [opts]);
+	    $(document).trigger("fhChange", [opts]);
 	  });
 	}
 
@@ -1202,199 +1202,226 @@ var pedigreejs = (function (exports) {
 	    clear_pedigree_data(opts);
 	  } else {
 	    proband = {
-	      "name": "ch1",
-	      "sex": "F",
-	      "mother": "f21",
-	      "father": "m21",
-	      "proband": true,
-	      "status": "0",
-	      "display_name": "me"
+	      name: "ch1",
+	      sex: "F",
+	      mother: "f21",
+	      father: "m21",
+	      proband: true,
+	      status: "0",
+	      display_name: "me"
 	    };
 	    clear(opts); // clear all storage data
 	  }
 	  delete opts.dataset;
-	  let selected = $("input[name='default_fam']:checked");
-	  if (selected.length > 0 && selected.val() === 'extended2') {
-	    // secondary relatives
-	    opts.dataset = [{
-	      "name": "wZA",
-	      "sex": "M",
-	      "top_level": true,
-	      "status": "0",
-	      "display_name": "paternal grandfather"
-	    }, {
-	      "name": "MAk",
-	      "sex": "F",
-	      "top_level": true,
-	      "status": "0",
-	      "display_name": "paternal grandmother"
-	    }, {
-	      "name": "zwB",
-	      "sex": "M",
-	      "top_level": true,
-	      "status": "0",
-	      "display_name": "maternal grandfather"
-	    }, {
-	      "name": "dOH",
-	      "sex": "F",
-	      "top_level": true,
-	      "status": "0",
-	      "display_name": "maternal grandmother"
-	    }, {
-	      "name": "MKg",
-	      "sex": "F",
-	      "mother": "MAk",
-	      "father": "wZA",
-	      "status": "0",
-	      "display_name": "paternal aunt"
-	    }, {
-	      "name": "xsm",
-	      "sex": "M",
-	      "mother": "MAk",
-	      "father": "wZA",
-	      "status": "0",
-	      "display_name": "paternal uncle"
-	    }, {
-	      "name": "m21",
-	      "sex": "M",
-	      "mother": "MAk",
-	      "father": "wZA",
-	      "status": "0",
-	      "display_name": "father"
-	    }, {
-	      "name": "f21",
-	      "sex": "F",
-	      "mother": "dOH",
-	      "father": "zwB",
-	      "status": "0",
-	      "display_name": "mother"
-	    }, {
-	      "name": "aOH",
-	      "sex": "F",
-	      "mother": "f21",
-	      "father": "m21",
-	      "status": "0",
-	      "display_name": "sister"
-	    }, {
-	      "name": "Vha",
-	      "sex": "M",
-	      "mother": "f21",
-	      "father": "m21",
-	      "status": "0",
-	      "display_name": "brother"
-	    }, {
-	      "name": "Spj",
-	      "sex": "M",
-	      "mother": "f21",
-	      "father": "m21",
-	      "noparents": true,
-	      "status": "0",
-	      "display_name": "partner"
-	    }, proband, {
-	      "name": "zhk",
-	      "sex": "F",
-	      "mother": "ch1",
-	      "father": "Spj",
-	      "status": "0",
-	      "display_name": "daughter"
-	    }, {
-	      "name": "Knx",
-	      "display_name": "son",
-	      "sex": "M",
-	      "mother": "ch1",
-	      "father": "Spj",
-	      "status": "0"
-	    }, {
-	      "name": "uuc",
-	      "display_name": "maternal aunt",
-	      "sex": "F",
-	      "mother": "dOH",
-	      "father": "zwB",
-	      "status": "0"
-	    }, {
-	      "name": "xIw",
-	      "display_name": "maternal uncle",
-	      "sex": "M",
-	      "mother": "dOH",
-	      "father": "zwB",
-	      "status": "0"
-	    }];
-	  } else if (selected.length > 0 && selected.val() === 'extended1') {
-	    // primary relatives
-	    opts.dataset = [{
-	      "name": "m21",
-	      "sex": "M",
-	      "mother": null,
-	      "father": null,
-	      "status": "0",
-	      "display_name": "father",
-	      "noparents": true
-	    }, {
-	      "name": "f21",
-	      "sex": "F",
-	      "mother": null,
-	      "father": null,
-	      "status": "0",
-	      "display_name": "mother",
-	      "noparents": true
-	    }, {
-	      "name": "aOH",
-	      "sex": "F",
-	      "mother": "f21",
-	      "father": "m21",
-	      "status": "0",
-	      "display_name": "sister"
-	    }, {
-	      "name": "Vha",
-	      "sex": "M",
-	      "mother": "f21",
-	      "father": "m21",
-	      "status": "0",
-	      "display_name": "brother"
-	    }, {
-	      "name": "Spj",
-	      "sex": "M",
-	      "mother": "f21",
-	      "father": "m21",
-	      "noparents": true,
-	      "status": "0",
-	      "display_name": "partner"
-	    }, proband, {
-	      "name": "zhk",
-	      "sex": "F",
-	      "mother": "ch1",
-	      "father": "Spj",
-	      "status": "0",
-	      "display_name": "daughter"
-	    }, {
-	      "name": "Knx",
-	      "display_name": "son",
-	      "sex": "M",
-	      "mother": "ch1",
-	      "father": "Spj",
-	      "status": "0"
-	    }];
-	  } else {
-	    opts.dataset = [{
-	      "name": "m21",
-	      "display_name": "father",
-	      "sex": "M",
-	      "top_level": true
-	    }, {
-	      "name": "f21",
-	      "display_name": "mother",
-	      "sex": "F",
-	      "top_level": true
-	    }, proband];
-	  }
+	  opts.dataset = [{
+	    name: "m11",
+	    display_name: "Person",
+	    sex: "M",
+	    top_level: true
+	  }];
+
+	  //   let selected = $("input[name='default_fam']:checked");
+	  //   if (selected.length > 0 && selected.val() === "extended2") {
+	  //     // secondary relatives
+	  //     opts.dataset = [
+	  //       {
+	  //         name: "wZA",
+	  //         sex: "M",
+	  //         top_level: true,
+	  //         status: "0",
+	  //         display_name: "paternal grandfather",
+	  //       },
+	  //       {
+	  //         name: "MAk",
+	  //         sex: "F",
+	  //         top_level: true,
+	  //         status: "0",
+	  //         display_name: "paternal grandmother",
+	  //       },
+	  //       {
+	  //         name: "zwB",
+	  //         sex: "M",
+	  //         top_level: true,
+	  //         status: "0",
+	  //         display_name: "maternal grandfather",
+	  //       },
+	  //       {
+	  //         name: "dOH",
+	  //         sex: "F",
+	  //         top_level: true,
+	  //         status: "0",
+	  //         display_name: "maternal grandmother",
+	  //       },
+	  //       {
+	  //         name: "MKg",
+	  //         sex: "F",
+	  //         mother: "MAk",
+	  //         father: "wZA",
+	  //         status: "0",
+	  //         display_name: "paternal aunt",
+	  //       },
+	  //       {
+	  //         name: "xsm",
+	  //         sex: "M",
+	  //         mother: "MAk",
+	  //         father: "wZA",
+	  //         status: "0",
+	  //         display_name: "paternal uncle",
+	  //       },
+	  //       {
+	  //         name: "m21",
+	  //         sex: "M",
+	  //         mother: "MAk",
+	  //         father: "wZA",
+	  //         status: "0",
+	  //         display_name: "father",
+	  //       },
+	  //       {
+	  //         name: "f21",
+	  //         sex: "F",
+	  //         mother: "dOH",
+	  //         father: "zwB",
+	  //         status: "0",
+	  //         display_name: "mother",
+	  //       },
+	  //       {
+	  //         name: "aOH",
+	  //         sex: "F",
+	  //         mother: "f21",
+	  //         father: "m21",
+	  //         status: "0",
+	  //         display_name: "sister",
+	  //       },
+	  //       {
+	  //         name: "Vha",
+	  //         sex: "M",
+	  //         mother: "f21",
+	  //         father: "m21",
+	  //         status: "0",
+	  //         display_name: "brother",
+	  //       },
+	  //       {
+	  //         name: "Spj",
+	  //         sex: "M",
+	  //         mother: "f21",
+	  //         father: "m21",
+	  //         noparents: true,
+	  //         status: "0",
+	  //         display_name: "partner",
+	  //       },
+	  //       proband,
+	  //       {
+	  //         name: "zhk",
+	  //         sex: "F",
+	  //         mother: "ch1",
+	  //         father: "Spj",
+	  //         status: "0",
+	  //         display_name: "daughter",
+	  //       },
+	  //       {
+	  //         name: "Knx",
+	  //         display_name: "son",
+	  //         sex: "M",
+	  //         mother: "ch1",
+	  //         father: "Spj",
+	  //         status: "0",
+	  //       },
+	  //       {
+	  //         name: "uuc",
+	  //         display_name: "maternal aunt",
+	  //         sex: "F",
+	  //         mother: "dOH",
+	  //         father: "zwB",
+	  //         status: "0",
+	  //       },
+	  //       {
+	  //         name: "xIw",
+	  //         display_name: "maternal uncle",
+	  //         sex: "M",
+	  //         mother: "dOH",
+	  //         father: "zwB",
+	  //         status: "0",
+	  //       },
+	  //     ];
+	  //   } else if (selected.length > 0 && selected.val() === "extended1") {
+	  //     // primary relatives
+	  //     opts.dataset = [
+	  //       {
+	  //         name: "m21",
+	  //         sex: "M",
+	  //         mother: null,
+	  //         father: null,
+	  //         status: "0",
+	  //         display_name: "father",
+	  //         noparents: true,
+	  //       },
+	  //       {
+	  //         name: "f21",
+	  //         sex: "F",
+	  //         mother: null,
+	  //         father: null,
+	  //         status: "0",
+	  //         display_name: "mother",
+	  //         noparents: true,
+	  //       },
+	  //       {
+	  //         name: "aOH",
+	  //         sex: "F",
+	  //         mother: "f21",
+	  //         father: "m21",
+	  //         status: "0",
+	  //         display_name: "sister",
+	  //       },
+	  //       {
+	  //         name: "Vha",
+	  //         sex: "M",
+	  //         mother: "f21",
+	  //         father: "m21",
+	  //         status: "0",
+	  //         display_name: "brother",
+	  //       },
+	  //       {
+	  //         name: "Spj",
+	  //         sex: "M",
+	  //         mother: "f21",
+	  //         father: "m21",
+	  //         noparents: true,
+	  //         status: "0",
+	  //         display_name: "partner",
+	  //       },
+	  //       proband,
+	  //       {
+	  //         name: "zhk",
+	  //         sex: "F",
+	  //         mother: "ch1",
+	  //         father: "Spj",
+	  //         status: "0",
+	  //         display_name: "daughter",
+	  //       },
+	  //       {
+	  //         name: "Knx",
+	  //         display_name: "son",
+	  //         sex: "M",
+	  //         mother: "ch1",
+	  //         father: "Spj",
+	  //         status: "0",
+	  //       },
+	  //     ];
+	  //   } else {
+	  //     opts.dataset = [
+	  //       { name: "m21", display_name: "father", sex: "M", top_level: true },
+	  //       { name: "f21", display_name: "mother", sex: "F", top_level: true },
+	  //       proband,
+	  //     ];
+	  //   }
 	  rebuild(opts);
 	}
 	function updateButtons(opts) {
 	  let current = get_count(opts);
 	  let nstore$1 = nstore(opts);
 	  let id = "#" + opts.btn_target;
-	  if (nstore$1 <= current) $(id + " .fa-redo").addClass('disabled');else $(id + " .fa-redo").removeClass('disabled');
-	  if (current > 1) $(id + " .fa-undo").removeClass('disabled');else $(id + " .fa-undo").addClass('disabled');
+	  if (nstore$1 <= current) $(id + " .fa-redo").addClass("disabled");else $(id + " .fa-redo").removeClass("disabled");
+	  if (current > 1) $(id + " .fa-undo").removeClass("disabled");else $(id + " .fa-undo").addClass("disabled");
 	}
 
 	/**
