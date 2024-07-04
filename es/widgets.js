@@ -541,7 +541,20 @@ function openEditDialog(opts, d) {
     '<label class="radio-inline"><input type="radio" name="sex" value="F" ' +
     (d.data.sex === "F" ? "checked" : "") +
     ">Female</label>" +
+    '<label class="radio-inline"><input type="radio" name="sex" value="U">Unknown</label>' +
     "</td></tr>";
+
+  // alive status = 0; dead status = 1
+  table +=
+    '<tr><td colspan="2" id="id_status">' +
+    '<label class="checkbox-inline"><input type="radio" name="status" value="0" ' +
+    (parseInt(d.data.status) === 0 ? "checked" : "") +
+    ">&thinsp;Alive</label>" +
+    '<label class="checkbox-inline"><input type="radio" name="status" value="1" ' +
+    (parseInt(d.data.status) === 1 ? "checked" : "") +
+    ">&thinsp;Deceased</label>" +
+    "</td></tr>";
+  $("#id_status input[value='" + d.data.status + "']").prop("checked", true);
 
   // switches
   let switches = [
@@ -572,6 +585,29 @@ function openEditDialog(opts, d) {
     "dztwin",
   ];
   $.merge(exclude, switches);
+  table += '<tr><td colspan="2"><strong>Age of Diagnosis:</strong></td></tr>';
+  $.each(opts.diseases, function (k, v) {
+    exclude.push(v.type + "_diagnosis_age");
+
+    let disease_colour =
+      '&thinsp;<span style="padding-left:5px;background:' +
+      opts.diseases[k].colour +
+      '"></span>';
+    let diagnosis_age = d.data[v.type + "_diagnosis_age"];
+
+    table +=
+      "<tr><td style='text-align:right'>" +
+      capitaliseFirstLetter(v.type.replace("_", " ")) +
+      disease_colour +
+      "&nbsp;</td><td>" +
+      "<input class='form-control' id='id_" +
+      v.type +
+      "_diagnosis_age_0' max='110' min='0' name='" +
+      v.type +
+      "_diagnosis_age_0' style='width:5em' type='number' value='" +
+      (diagnosis_age !== undefined ? diagnosis_age : "") +
+      "'></td></tr>";
+  });
 
   table += '<tr><td colspan="2" style="line-height:1px;"></td></tr>';
   $.each(d.data, function (k, v) {

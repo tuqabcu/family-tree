@@ -3162,7 +3162,11 @@ var pedigreejs = (function (exports) {
 	  table += "<tr><td style='text-align:right'>Name</td><td><input class='form-control' type='text' id='id_display_name' name='display_name' value=" + (d.data.display_name ? d.data.display_name : "") + "></td></tr>";
 	  table += "<tr><td style='text-align:right'>Age</td><td><input class='form-control' type='number' id='id_age' min='0' max='120' name='age' style='width:7em' value=" + (d.data.age ? d.data.age : "") + "></td></tr>";
 	  table += "<tr><td style='text-align:right'>Year Of Birth</td><td><input class='form-control' type='number' id='id_yob' min='1900' max='2050' name='yob' style='width:7em' value=" + (d.data.yob ? d.data.yob : "") + "></td></tr>";
-	  table += '<tr><td colspan="2" id="id_sex">' + '<label class="radio-inline"><input type="radio" name="sex" value="M" ' + (d.data.sex === "M" ? "checked" : "") + ">Male</label>" + '<label class="radio-inline"><input type="radio" name="sex" value="F" ' + (d.data.sex === "F" ? "checked" : "") + ">Female</label>" + "</td></tr>";
+	  table += '<tr><td colspan="2" id="id_sex">' + '<label class="radio-inline"><input type="radio" name="sex" value="M" ' + (d.data.sex === "M" ? "checked" : "") + ">Male</label>" + '<label class="radio-inline"><input type="radio" name="sex" value="F" ' + (d.data.sex === "F" ? "checked" : "") + ">Female</label>" + '<label class="radio-inline"><input type="radio" name="sex" value="U">Unknown</label>' + "</td></tr>";
+
+	  // alive status = 0; dead status = 1
+	  table += '<tr><td colspan="2" id="id_status">' + '<label class="checkbox-inline"><input type="radio" name="status" value="0" ' + (parseInt(d.data.status) === 0 ? "checked" : "") + ">&thinsp;Alive</label>" + '<label class="checkbox-inline"><input type="radio" name="status" value="1" ' + (parseInt(d.data.status) === 1 ? "checked" : "") + ">&thinsp;Deceased</label>" + "</td></tr>";
+	  $("#id_status input[value='" + d.data.status + "']").prop("checked", true);
 
 	  // switches
 	  let switches = ["adopted_in", "adopted_out", "miscarriage", "stillbirth", "termination"];
@@ -3170,6 +3174,13 @@ var pedigreejs = (function (exports) {
 	  //
 	  let exclude = ["children", "name", "parent_node", "top_level", "id", "noparents", "level", "age", "sex", "status", "display_name", "mother", "father", "yob", "mztwin", "dztwin"];
 	  $.merge(exclude, switches);
+	  table += '<tr><td colspan="2"><strong>Age of Diagnosis:</strong></td></tr>';
+	  $.each(opts.diseases, function (k, v) {
+	    exclude.push(v.type + "_diagnosis_age");
+	    let disease_colour = '&thinsp;<span style="padding-left:5px;background:' + opts.diseases[k].colour + '"></span>';
+	    let diagnosis_age = d.data[v.type + "_diagnosis_age"];
+	    table += "<tr><td style='text-align:right'>" + capitaliseFirstLetter(v.type.replace("_", " ")) + disease_colour + "&nbsp;</td><td>" + "<input class='form-control' id='id_" + v.type + "_diagnosis_age_0' max='110' min='0' name='" + v.type + "_diagnosis_age_0' style='width:5em' type='number' value='" + (diagnosis_age !== undefined ? diagnosis_age : "") + "'></td></tr>";
+	  });
 	  table += '<tr><td colspan="2" style="line-height:1px;"></td></tr>';
 	  $.each(d.data, function (k, v) {
 	    if ($.inArray(k, exclude) === -1) {
