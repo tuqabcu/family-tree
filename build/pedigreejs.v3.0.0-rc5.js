@@ -1214,10 +1214,13 @@ var pedigreejs = (function (exports) {
 	  }
 	  delete opts.dataset;
 	  opts.dataset = [{
-	    name: "m11",
-	    display_name: "Person",
-	    sex: "M",
-	    top_level: true
+	    name: "ch1",
+	    sex: "F",
+	    mother: "",
+	    father: "",
+	    proband: true,
+	    status: "0",
+	    display_name: "me"
 	  }];
 
 	  //   let selected = $("input[name='default_fam']:checked");
@@ -1409,9 +1412,9 @@ var pedigreejs = (function (exports) {
 	  //     ];
 	  //   } else {
 	  //     opts.dataset = [
-	  //       { name: "m21", display_name: "father", sex: "M", top_level: true },
-	  //       { name: "f21", display_name: "mother", sex: "F", top_level: true },
-	  //       proband,
+	  // { name: "m21", display_name: "father", sex: "M", top_level: true },
+	  // { name: "f21", display_name: "mother", sex: "F", top_level: true },
+	  // proband,
 	  //     ];
 	  //   }
 	  rebuild(opts);
@@ -1823,19 +1826,19 @@ var pedigreejs = (function (exports) {
 	**/
 
 	function addIO(opts) {
-	  $('#load').change(function (e) {
+	  $("#load").change(function (e) {
 	    load(e, opts);
 	  });
-	  $('#save').click(function (_e) {
+	  $("#save").click(function (_e) {
 	    save$1(opts);
 	  });
-	  $('#print').click(function (_e) {
+	  $("#print").click(function (_e) {
 	    print(get_printable_svg(opts));
 	  });
-	  $('#svg_download').click(function (_e) {
+	  $("#svg_download").click(function (_e) {
 	    svg_download(get_printable_svg(opts));
 	  });
-	  $('#png_download, .fa-file-image').click(function (_e) {
+	  $("#png_download, .fa-file-image").click(function (_e) {
 	    let resolution = 1;
 	    img_download(opts, resolution, "image/png");
 	  });
@@ -1877,7 +1880,7 @@ var pedigreejs = (function (exports) {
 	 * Export pedigree as image, e.g. PNG
 	 */
 	function img_download(opts, resolution, img_type) {
-	  let deferred = svg2img($('#' + opts.targetDiv).find('svg'), "pedigree", {
+	  let deferred = svg2img($("#" + opts.targetDiv).find("svg"), "pedigree", {
 	    resolution: resolution,
 	    img_type: img_type
 	  });
@@ -1888,10 +1891,10 @@ var pedigreejs = (function (exports) {
 	      let newTab = window.open(); // pop-ups need to be enabled
 	      newTab.document.write(html);
 	    } else {
-	      let a = document.createElement('a');
+	      let a = document.createElement("a");
 	      a.href = obj.img;
-	      a.download = 'plot.png';
-	      a.target = '_blank';
+	      a.download = "plot.png";
+	      a.target = "_blank";
 	      document.body.appendChild(a);
 	      a.click();
 	      document.body.removeChild(a);
@@ -1918,7 +1921,7 @@ var pedigreejs = (function (exports) {
 	  copyStylesInline(copy, svg.get(0));
 	  let deferred = $.Deferred();
 	  let svgStr = new XMLSerializer().serializeToString(copy);
-	  let imgsrc = 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svgStr))); // convert SVG string to data URL
+	  let imgsrc = "data:image/svg+xml;base64," + window.btoa(unescape(encodeURIComponent(svgStr))); // convert SVG string to data URL
 	  let canvas = document.createElement("canvas");
 	  canvas.width = svg.width() * options.resolution;
 	  canvas.height = svg.height() * options.resolution;
@@ -1931,11 +1934,11 @@ var pedigreejs = (function (exports) {
 	    context.drawImage(img, 0, 0, canvas.width, canvas.height);
 	    console.log(deferred_name, options.img_type);
 	    deferred.resolve({
-	      'name': deferred_name,
-	      'resolution': options.resolution,
-	      'img': canvas.toDataURL(options.img_type, 1),
-	      'w': canvas.width,
-	      'h': canvas.height
+	      name: deferred_name,
+	      resolution: options.resolution,
+	      img: canvas.toDataURL(options.img_type, 1),
+	      w: canvas.width,
+	      h: canvas.height
 	    });
 	    context.clearRect(0, 0, canvas.width, canvas.height);
 	  };
@@ -2006,11 +2009,11 @@ var pedigreejs = (function (exports) {
 	  $.each(matches, function (_index, match) {
 	    let quote = match[1] ? match[1] : "";
 	    let val = match[2];
-	    let m1 = "id=\"" + val + "\"";
+	    let m1 = 'id="' + val + '"';
 	    let m2 = "url\\(" + quote + "#" + val + quote + "\\)";
 	    let newval = val + makeid(2);
-	    svg_html = svg_html.replace(new RegExp(m1, 'g'), "id=\"" + newval + "\"");
-	    svg_html = svg_html.replace(new RegExp(m2, 'g'), "url(#" + newval + ")");
+	    svg_html = svg_html.replace(new RegExp(m1, "g"), 'id="' + newval + '"');
+	    svg_html = svg_html.replace(new RegExp(m2, "g"), "url(#" + newval + ")");
 	  });
 	  return svg_html;
 	}
@@ -2034,8 +2037,8 @@ var pedigreejs = (function (exports) {
 	  if (local_dataset !== undefined && local_dataset !== null) {
 	    opts.dataset = local_dataset;
 	  }
-	  let svg_div = $('<div></div>'); // create a new div
-	  let svg = $('#' + opts.targetDiv).find('svg').clone().appendTo(svg_div);
+	  let svg_div = $("<div></div>"); // create a new div
+	  let svg = $("#" + opts.targetDiv).find("svg").clone().appendTo(svg_div);
 	  let a4 = {
 	    w: 595 - 40,
 	    h: 842 - 50
@@ -2049,18 +2052,18 @@ var pedigreejs = (function (exports) {
 	  let k = f / Math.max(d.w / a4.w, d.h / a4.h);
 	  let xi = -(b.xmin - opts.symbol_size) * k;
 	  let yi = -(b.ymin - opts.symbol_size) * k;
-	  svg.attr('width', a4.w);
-	  svg.attr('height', d.h * k);
+	  svg.attr("width", a4.w);
+	  svg.attr("height", d.h * k);
 	  svg.find(".diagram").attr("transform", "translate(" + xi + ", " + yi + ") scale(" + k + ")");
 	  return svg_div;
 	}
 
 	// download the SVG to a file
 	function svg_download(svg) {
-	  let a = document.createElement('a');
-	  a.href = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg.html())));
-	  a.download = 'plot.svg';
-	  a.target = '_blank';
+	  let a = document.createElement("a");
+	  a.href = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svg.html())));
+	  a.download = "plot.svg";
+	  a.target = "_blank";
 	  document.body.appendChild(a);
 	  a.click();
 	  document.body.removeChild(a);
@@ -2071,11 +2074,11 @@ var pedigreejs = (function (exports) {
 	  if (el.constructor !== Array) el = [el];
 	  let width = $(window).width() * 0.9;
 	  let height = $(window).height() - 10;
-	  let cssFiles = ['/static/css/canrisk.css', 'https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css'];
-	  let printWindow = window.open('', 'PrintMap', 'width=' + width + ',height=' + height);
-	  let headContent = '';
+	  let cssFiles = ["/static/css/canrisk.css", "https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"];
+	  let printWindow = window.open("", "PrintMap", "width=" + width + ",height=" + height);
+	  let headContent = "";
 	  for (let i = 0; i < cssFiles.length; i++) headContent += '<link href="' + cssFiles[i] + '" rel="stylesheet" type="text/css" media="all">';
-	  headContent += "<style>body {font-size: " + $("body").css('font-size') + ";}</style>";
+	  headContent += "<style>body {font-size: " + $("body").css("font-size") + ";}</style>";
 	  let html = "";
 	  for (let i = 0; i < el.length; i++) {
 	    if (i === 0 && id) html += id;
@@ -2092,11 +2095,70 @@ var pedigreejs = (function (exports) {
 	  }, 300);
 	}
 
+	// // save content to a file
+	// export function save_file(opts, content, filename, type) {
+	//   console.log("helloooo im saveee");
+	//   if (opts.DEBUG) console.log(content);
+	//   if (!filename) filename = "ped.txt";
+	//   if (!type) type = "text/plain";
+
+	//   let file = new Blob([content], { type: type });
+	//   if (window.navigator.msSaveOrOpenBlob)
+	//     // IE10+
+	//     window.navigator.msSaveOrOpenBlob(file, filename);
+	//   else {
+	//     // other browsers
+	//     let a = document.createElement("a");
+	//     let url = URL.createObjectURL(file);
+	//     a.href = url;
+	//     a.download = filename;
+	//     document.body.appendChild(a);
+	//     a.click();
+	//     setTimeout(function () {
+	//       document.body.removeChild(a);
+	//       window.URL.revokeObjectURL(url);
+	//     }, 0);
+	//   }
+	// }
+
+	// Convert JSON array to CSV format
+	function jsonToCSV(jsonArray) {
+	  const keys = Object.keys(jsonArray[0]);
+	  const csvRows = [keys.join(",")]; // Header row
+
+	  for (const row of jsonArray) {
+	    const values = keys.map(key => {
+	      const escaped = ("" + row[key]).replace(/"/g, '\\"');
+	      return escaped;
+	    });
+	    csvRows.push(values.join(","));
+	  }
+	  return csvRows.join("\n");
+	}
+
 	// save content to a file
 	function save_file(opts, content, filename, type) {
+	  console.log("helloooo im saveee");
 	  if (opts.DEBUG) console.log(content);
-	  if (!filename) filename = "ped.txt";
-	  if (!type) type = "text/plain";
+
+	  // Default filename and type if not provided
+	  if (!filename) filename = "ped.csv";
+	  if (!type) type = "text/csv";
+
+	  // Parse content if it's a JSON string
+	  if (typeof content === "string") {
+	    try {
+	      content = JSON.parse(content);
+	    } catch (e) {
+	      console.error("Invalid JSON string provided.");
+	      return;
+	    }
+	  }
+
+	  // Convert content to CSV if it's an object
+	  if (typeof content === "object") {
+	    content = jsonToCSV(content);
+	  }
 	  let file = new Blob([content], {
 	    type: type
 	  });
@@ -2122,11 +2184,11 @@ var pedigreejs = (function (exports) {
 	}
 	function canrisk_validation(opts) {
 	  $.each(opts.dataset, function (_idx, p) {
-	    if (!p.hidden && p.sex === 'M' && !isProband(p)) {
-	      if (p[cancers['breast_cancer2']]) {
-	        let msg = 'Male family member (' + p.display_name + ') with contralateral breast cancer found. ' + 'Please note that as the risk models do not take this into account the second ' + 'breast cancer is ignored.';
+	    if (!p.hidden && p.sex === "M" && !isProband(p)) {
+	      if (p[cancers["breast_cancer2"]]) {
+	        let msg = "Male family member (" + p.display_name + ") with contralateral breast cancer found. " + "Please note that as the risk models do not take this into account the second " + "breast cancer is ignored.";
 	        console.error(msg);
-	        delete p[cancers['breast_cancer2']];
+	        delete p[cancers["breast_cancer2"]];
 	        messages("Warning", msg);
 	      }
 	    }
@@ -2175,8 +2237,8 @@ var pedigreejs = (function (exports) {
 	    rebuild(opts);
 	    console.log(risk_factors);
 	    // load risk factors - fire riskfactorChange event
-	    $(document).trigger('riskfactorChange', [opts, risk_factors]);
-	    $(document).trigger('fhChange', [opts]); // trigger fhChange event
+	    $(document).trigger("riskfactorChange", [opts, risk_factors]);
+	    $(document).trigger("fhChange", [opts]); // trigger fhChange event
 
 	    try {
 	      // update FH section
@@ -2204,7 +2266,7 @@ var pedigreejs = (function (exports) {
 	  } else {
 	    console.error("File could not be read!");
 	  }
-	  $("#load")[0].value = ''; // reset value
+	  $("#load")[0].value = ""; // reset value
 	}
 
 	//
@@ -2219,25 +2281,25 @@ var pedigreejs = (function (exports) {
 	//  7. Genotypes (column 7 onwards);
 	//	 columns 7 & 8 are allele calls for first variant ('0' = no call); colummns 9 & 10 are calls for second variant etc.
 	function readLinkage(boadicea_lines) {
-	  let lines = boadicea_lines.trim().split('\n');
+	  let lines = boadicea_lines.trim().split("\n");
 	  let ped = [];
 	  let famid;
 	  for (let i = 0; i < lines.length; i++) {
 	    let attr = $.map(lines[i].trim().split(/\s+/), function (val, _i) {
 	      return val.trim();
 	    });
-	    if (attr.length < 5) throw new Error('unknown format');
-	    let sex = attr[4] === '1' ? 'M' : attr[4] === '2' ? 'F' : 'U';
+	    if (attr.length < 5) throw new Error("unknown format");
+	    let sex = attr[4] === "1" ? "M" : attr[4] === "2" ? "F" : "U";
 	    let indi = {
-	      'famid': attr[0],
-	      'display_name': attr[1],
-	      'name': attr[1],
-	      'sex': sex
+	      famid: attr[0],
+	      display_name: attr[1],
+	      name: attr[1],
+	      sex: sex
 	    };
 	    if (attr[2] !== "0") indi.father = attr[2];
 	    if (attr[3] !== "0") indi.mother = attr[3];
-	    if (typeof famid != 'undefined' && famid !== indi.famid) {
-	      console.error('multiple family IDs found only using famid = ' + famid);
+	    if (typeof famid != "undefined" && famid !== indi.famid) {
+	      console.error("multiple family IDs found only using famid = " + famid);
 	      break;
 	    }
 	    if (attr[5] === "2") indi.affected = 2;
@@ -2265,7 +2327,7 @@ var pedigreejs = (function (exports) {
 
 	// read boadicea format v4 & v2
 	function readBoadiceaV4(boadicea_lines, version) {
-	  let lines = boadicea_lines.trim().split('\n');
+	  let lines = boadicea_lines.trim().split("\n");
 	  let ped = [];
 	  // assumes two line header
 	  for (let i = 2; i < lines.length; i++) {
@@ -2274,11 +2336,11 @@ var pedigreejs = (function (exports) {
 	    });
 	    if (attr.length > 1) {
 	      let indi = {
-	        'famid': attr[0],
-	        'display_name': attr[1],
-	        'name': attr[3],
-	        'sex': attr[6],
-	        'status': attr[8]
+	        famid: attr[0],
+	        display_name: attr[1],
+	        name: attr[3],
+	        sex: attr[6],
+	        status: attr[8]
 	      };
 	      if (attr[2] === "1") indi.proband = true;
 	      if (attr[4] !== "0") indi.father = attr[4];
@@ -2301,11 +2363,11 @@ var pedigreejs = (function (exports) {
 	        // result, 0 = untested, P = positive, N = negative
 	        for (let j = 0; j < 5; j++) {
 	          idx += 2;
-	          if (attr[idx - 2] !== '0') {
-	            if ((attr[idx - 2] === 'S' || attr[idx - 2] === 'T') && (attr[idx - 1] === 'P' || attr[idx - 1] === 'N')) indi[genetic_test1[j] + '_gene_test'] = {
-	              'type': attr[idx - 2],
-	              'result': attr[idx - 1]
-	            };else console.warn('UNRECOGNISED GENE TEST ON LINE ' + (i + 1) + ": " + attr[idx - 2] + " " + attr[idx - 1]);
+	          if (attr[idx - 2] !== "0") {
+	            if ((attr[idx - 2] === "S" || attr[idx - 2] === "T") && (attr[idx - 1] === "P" || attr[idx - 1] === "N")) indi[genetic_test1[j] + "_gene_test"] = {
+	              type: attr[idx - 2],
+	              result: attr[idx - 1]
+	            };else console.warn("UNRECOGNISED GENE TEST ON LINE " + (i + 1) + ": " + attr[idx - 2] + " " + attr[idx - 1]);
 	          }
 	        }
 	      } else if (version === 2) {
@@ -2313,47 +2375,47 @@ var pedigreejs = (function (exports) {
 	        // type, 0 = untested, S = mutation search, T = direct gene test
 	        // result, 0 = untested, N = no mutation, 1 = BRCA1 positive, 2 = BRCA2 positive, 3 = BRCA1/2 positive
 	        idx += 2; // gtest
-	        if (attr[idx - 2] !== '0') {
-	          if (attr[idx - 2] === 'S' || attr[idx - 2] === 'T') {
-	            if (attr[idx - 1] === 'N') {
-	              indi['brca1_gene_test'] = {
-	                'type': attr[idx - 2],
-	                'result': 'N'
+	        if (attr[idx - 2] !== "0") {
+	          if (attr[idx - 2] === "S" || attr[idx - 2] === "T") {
+	            if (attr[idx - 1] === "N") {
+	              indi["brca1_gene_test"] = {
+	                type: attr[idx - 2],
+	                result: "N"
 	              };
-	              indi['brca2_gene_test'] = {
-	                'type': attr[idx - 2],
-	                'result': 'N'
+	              indi["brca2_gene_test"] = {
+	                type: attr[idx - 2],
+	                result: "N"
 	              };
-	            } else if (attr[idx - 1] === '1') {
-	              indi['brca1_gene_test'] = {
-	                'type': attr[idx - 2],
-	                'result': 'P'
+	            } else if (attr[idx - 1] === "1") {
+	              indi["brca1_gene_test"] = {
+	                type: attr[idx - 2],
+	                result: "P"
 	              };
-	              indi['brca2_gene_test'] = {
-	                'type': attr[idx - 2],
-	                'result': 'N'
+	              indi["brca2_gene_test"] = {
+	                type: attr[idx - 2],
+	                result: "N"
 	              };
-	            } else if (attr[idx - 1] === '2') {
-	              indi['brca1_gene_test'] = {
-	                'type': attr[idx - 2],
-	                'result': 'N'
+	            } else if (attr[idx - 1] === "2") {
+	              indi["brca1_gene_test"] = {
+	                type: attr[idx - 2],
+	                result: "N"
 	              };
-	              indi['brca2_gene_test'] = {
-	                'type': attr[idx - 2],
-	                'result': 'P'
+	              indi["brca2_gene_test"] = {
+	                type: attr[idx - 2],
+	                result: "P"
 	              };
-	            } else if (attr[idx - 1] === '3') {
-	              indi['brca1_gene_test'] = {
-	                'type': attr[idx - 2],
-	                'result': 'P'
+	            } else if (attr[idx - 1] === "3") {
+	              indi["brca1_gene_test"] = {
+	                type: attr[idx - 2],
+	                result: "P"
 	              };
-	              indi['brca2_gene_test'] = {
-	                'type': attr[idx - 2],
-	                'result': 'P'
+	              indi["brca2_gene_test"] = {
+	                type: attr[idx - 2],
+	                result: "P"
 	              };
 	            }
 	          } else {
-	            console.warn('UNRECOGNISED GENE TEST ON LINE ' + (i + 1) + ": " + attr[idx - 2] + " " + attr[idx - 1]);
+	            console.warn("UNRECOGNISED GENE TEST ON LINE " + (i + 1) + ": " + attr[idx - 2] + " " + attr[idx - 1]);
 	          }
 	        }
 	        if (attr[idx++] !== "0") indi.ashkenazi = 1;
@@ -2361,8 +2423,8 @@ var pedigreejs = (function (exports) {
 
 	      // status, 0 = unspecified, N = negative, P = positive
 	      for (let j = 0; j < pathology_tests.length; j++) {
-	        if (attr[idx] !== '0') {
-	          if (attr[idx] === 'N' || attr[idx] === 'P') indi[pathology_tests[j] + '_bc_pathology'] = attr[idx];else console.warn('UNRECOGNISED PATHOLOGY ON LINE ' + (i + 1) + ": " + pathology_tests[j] + " " + attr[idx]);
+	        if (attr[idx] !== "0") {
+	          if (attr[idx] === "N" || attr[idx] === "P") indi[pathology_tests[j] + "_bc_pathology"] = attr[idx];else console.warn("UNRECOGNISED PATHOLOGY ON LINE " + (i + 1) + ": " + pathology_tests[j] + " " + attr[idx]);
 	        }
 	        idx++;
 	      }
@@ -2414,8 +2476,8 @@ var pedigreejs = (function (exports) {
 	            if (ped[i].level === ped[j].level - 1) {
 	              pidx = getPartnerIdx(ped, ped[j]);
 	              if (pidx > -1 && i !== pidx) {
-	                ped[i].mother = ped[j].sex === 'F' ? ped[j].name : ped[pidx].name;
-	                ped[i].father = ped[j].sex === 'M' ? ped[j].name : ped[pidx].name;
+	                ped[i].mother = ped[j].sex === "F" ? ped[j].name : ped[pidx].name;
+	                ped[i].father = ped[j].sex === "M" ? ped[j].name : ped[pidx].name;
 	                break;
 	              }
 	            }
@@ -2447,7 +2509,7 @@ var pedigreejs = (function (exports) {
 
 	// recursively update parents levels
 	function update_parents_level(idx, level, dataset) {
-	  let parents = ['mother', 'father'];
+	  let parents = ["mother", "father"];
 	  level++;
 	  for (let i = 0; i < parents.length; i++) {
 	    let pidx = getIdxByName(dataset, dataset[idx][parents[i]]);

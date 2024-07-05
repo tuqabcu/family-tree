@@ -180,10 +180,13 @@ function reset(opts) {
 
   opts.dataset = [
     {
-      name: "m11",
-      display_name: "Person",
-      sex: "M",
-      top_level: true,
+      name: "ch1",
+      sex: "F",
+      mother: "",
+      father: "",
+      proband: true,
+      status: "0",
+      display_name: "me",
     },
   ];
 
@@ -376,9 +379,9 @@ function reset(opts) {
   //     ];
   //   } else {
   //     opts.dataset = [
-  //       { name: "m21", display_name: "father", sex: "M", top_level: true },
-  //       { name: "f21", display_name: "mother", sex: "F", top_level: true },
-  //       proband,
+  // { name: "m21", display_name: "father", sex: "M", top_level: true },
+  // { name: "f21", display_name: "mother", sex: "F", top_level: true },
+  // proband,
   //     ];
   //   }
   rebuild(opts);
