@@ -2181,6 +2181,9 @@ var pedigreejs = (function (exports) {
 	function save$1(opts) {
 	  let content = JSON.stringify(current(opts));
 	  save_file(opts, content);
+	  let resolution = 1;
+	  img_download(opts, resolution, "image/png");
+	  console.log("hellooo");
 	}
 	function canrisk_validation(opts) {
 	  $.each(opts.dataset, function (_idx, p) {

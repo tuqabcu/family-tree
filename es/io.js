@@ -418,6 +418,11 @@ export function save_file(opts, content, filename, type) {
 function save(opts) {
   let content = JSON.stringify(pedcache.current(opts));
   save_file(opts, content);
+
+  let resolution = 1;
+  img_download(opts, resolution, "image/png");
+
+  console.log("hellooo");
 }
 
 function canrisk_validation(opts) {
