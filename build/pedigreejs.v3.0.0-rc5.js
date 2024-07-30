@@ -1880,25 +1880,27 @@ var pedigreejs = (function (exports) {
 	 * Export pedigree as image, e.g. PNG
 	 */
 	function img_download(opts, resolution, img_type) {
-	  let deferred = svg2img($("#" + opts.targetDiv).find("svg"), "pedigree", {
-	    resolution: resolution,
-	    img_type: img_type
-	  });
-	  $.when.apply($, [deferred]).done(function () {
-	    let obj = getByName(arguments, "pedigree");
-	    if (isEdge() || isIE()) {
-	      let html = "<img src='" + obj.img + "' alt='canvas image'/>";
-	      let newTab = window.open(); // pop-ups need to be enabled
-	      newTab.document.write(html);
-	    } else {
-	      let a = document.createElement("a");
-	      a.href = obj.img;
-	      a.download = "plot.png";
-	      a.target = "_blank";
-	      document.body.appendChild(a);
-	      a.click();
-	      document.body.removeChild(a);
-	    }
+	  return new Promise((resolve, reject) => {
+	    let deferred = svg2img($("#" + opts.targetDiv).find("svg"), "pedigree", {
+	      resolution: resolution,
+	      img_type: img_type
+	    });
+	    $.when.apply($, [deferred]).done(function () {
+	      let obj = getByName(arguments, "pedigree");
+	      if (isEdge() || isIE()) {
+	        let html = "<img src='" + obj.img + "' alt='canvas image'/>";
+	        let newTab = window.open(); // pop-ups need to be enabled
+	        newTab.document.write(html);
+	      } else {
+	        let a = document.createElement("a");
+	        a.href = obj.img;
+	        a.download = "plot.png";
+	        a.target = "_blank";
+	        document.body.appendChild(a);
+	        a.click();
+	        document.body.removeChild(a);
+	      }
+	    });
 	  });
 	}
 
@@ -2138,52 +2140,58 @@ var pedigreejs = (function (exports) {
 
 	// save content to a file
 	function save_file(opts, content, filename, type) {
-	  console.log("helloooo im saveee");
-	  if (opts.DEBUG) console.log(content);
+	  return new Promise((resolve, reject) => {
+	    console.log("helloooo im saveee");
+	    if (opts.DEBUG) console.log(content);
 
-	  // Default filename and type if not provided
-	  if (!filename) filename = "ped.csv";
-	  if (!type) type = "text/csv";
+	    // Default filename and type if not provided
+	    if (!filename) filename = "ped.csv";
+	    if (!type) type = "text/csv";
 
-	  // Parse content if it's a JSON string
-	  if (typeof content === "string") {
-	    try {
-	      content = JSON.parse(content);
-	    } catch (e) {
-	      console.error("Invalid JSON string provided.");
-	      return;
+	    // Parse content if it's a JSON string
+	    if (typeof content === "string") {
+	      try {
+	        content = JSON.parse(content);
+	      } catch (e) {
+	        console.error("Invalid JSON string provided.");
+	        return;
+	      }
 	    }
-	  }
 
-	  // Convert content to CSV if it's an object
-	  if (typeof content === "object") {
-	    content = jsonToCSV(content);
-	  }
-	  let file = new Blob([content], {
-	    type: type
+	    // Convert content to CSV if it's an object
+	    if (typeof content === "object") {
+	      content = jsonToCSV(content);
+	    }
+	    let file = new Blob([content], {
+	      type: type
+	    });
+	    if (window.navigator.msSaveOrOpenBlob)
+	      // IE10+
+	      window.navigator.msSaveOrOpenBlob(file, filename);else {
+	      // other browsers
+	      let a = document.createElement("a");
+	      let url = URL.createObjectURL(file);
+	      a.href = url;
+	      a.download = filename;
+	      document.body.appendChild(a);
+	      a.click();
+	      setTimeout(function () {
+	        document.body.removeChild(a);
+	        window.URL.revokeObjectURL(url);
+	      }, 0);
+	    }
 	  });
-	  if (window.navigator.msSaveOrOpenBlob)
-	    // IE10+
-	    window.navigator.msSaveOrOpenBlob(file, filename);else {
-	    // other browsers
-	    let a = document.createElement("a");
-	    let url = URL.createObjectURL(file);
-	    a.href = url;
-	    a.download = filename;
-	    document.body.appendChild(a);
-	    a.click();
-	    setTimeout(function () {
-	      document.body.removeChild(a);
-	      window.URL.revokeObjectURL(url);
-	    }, 0);
-	  }
 	}
-	function save$1(opts) {
-	  let content = JSON.stringify(current(opts));
-	  save_file(opts, content);
-	  let resolution = 1;
-	  img_download(opts, resolution, "image/png");
-	  console.log("hellooo");
+	async function save$1(opts) {
+	  try {
+	    let content = JSON.stringify(current(opts));
+	    await save_file(opts, content);
+	    let resolution = 1;
+	    await img_download(opts, resolution, "image/png");
+	    console.log("hellooo");
+	  } catch (error) {
+	    console.error("Error during save process:", error);
+	  }
 	}
 	function canrisk_validation(opts) {
 	  $.each(opts.dataset, function (_idx, p) {
